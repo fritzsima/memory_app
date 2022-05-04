@@ -50,7 +50,7 @@ class MemoryItem extends React.Component<Props, States> {
         </Segment>;
     }
     private renderSeeAllButton = (memory: Memory): React.ReactElement<any> | undefined => {
-        const uri: string = `/memory/${memory._id}`;
+        const uri: string = `/mymemory/${memory._id}`;
         return <Button as={Link} to={uri}>
             <FormattedMessage id="component.button.see_all" />
             <Icon name="angle double right"/>

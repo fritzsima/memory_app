@@ -30,7 +30,7 @@ class CreateMemory extends React.Component<Props, States> {
                 </Container>
             );
         } else {
-            return <Redirect to="/memory" />;
+            return <Redirect to="/mymemory" />;
         }
     }
 

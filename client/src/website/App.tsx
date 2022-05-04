@@ -8,6 +8,7 @@ import Waiting from "./pages/Waiting";
 import Footer from "./components/Footer";
 import { WRAPPER_VIEW_STYLE } from "../shared/styles";
 import Memories from "./pages/Memories";
+import MyMemories from "./pages/MyMemories";
 import { ComponentProps as Props } from "../shared/ComponentProps";
 import connectAllProps from "../shared/connect";
 import { SHOW_UNDER_SCROLL_HEIGHT } from "./components/constants";
@@ -40,7 +41,8 @@ class App extends React.Component<Props, States> {
                             <Switch>
                                 <Route exact path="/" render={ (props) => <Home {...props} /> } />
                                 <Route path="/login" render={ (props) => <LogIn {...props} /> } />
-                                <Route path="/memory" render={ (props) => <Memories {...props} /> } />
+                                <Route path="/home" render={ (props) => <Memories {...props} /> } />
+                                <Route path="/mymemory" render={ (props) => <MyMemories {...props} /> } />
                                 <Route path="/waiting" component={Waiting} />
                                 {/* add more routes here, the path should keep the same as PostType if necessary */}
                                 <Route render={ (props) => <ErrorPage {...props} error={{

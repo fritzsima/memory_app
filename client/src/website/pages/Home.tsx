@@ -5,6 +5,6 @@ interface Props {}
 interface States {}
 export default class Home extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
-        return <Redirect to="/memory" />;
+        return <Redirect to="/home" />;
     }
 }

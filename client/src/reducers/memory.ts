@@ -1,6 +1,7 @@
 import { AnyAction as Action } from "redux";
 import MemoryState from "../models/client/MemoryState";
 import { GET_MEMORY_SUCCESS, SAVE_MEMORY_SUCCESS, GET_MEMORY_BEGIN, SAVE_MEMORY_BEGIN, SAVE_MEMORY_FAILED, GET_MEMORY_FAILED, GET_MORE_MEMORY_SUCCESS, GET_MORE_MEMORY_BEGIN, GET_MORE_MEMORY_FAILED, SET_EDIT_MEMORY_CACHE, REMOVE_EDIT_MEMORY_CACHE, REMOVE_MEMORY_BEGIN, REMOVE_MEMORY_SUCCESS, REMOVE_MEMORY_FAILED } from "../actions/memory";
+import { GET_MY_MEMORY_BEGIN, GET_MY_MEMORY_SUCCESS, GET_MY_MEMORY_FAILED, GET_MORE_MY_MEMORY_BEGIN, GET_MORE_MY__MEMORY_SUCCESS, GET_MORE_MY_MEMORY_FAILED } from "../actions/memory";
 import Memory from "../models/Memory";
 import MemoryCache from "../models/client/MemoryCache";
 import PostType from "../models/PostType";
@@ -9,6 +10,8 @@ const initialState: MemoryState = {
     loading: false,
     valid: false,
     data: [],
+    myValid: false,
+    myData: [],
     loadingMore: false,
     hasMore: false,
     editCache: {}
@@ -17,6 +20,7 @@ const initialState: MemoryState = {
 const memory = (state: MemoryState = initialState, action: Action): MemoryState => {
     switch (action.type) {
         case GET_MEMORY_BEGIN:
+        case GET_MY_MEMORY_BEGIN:
         case SAVE_MEMORY_BEGIN:
         case REMOVE_MEMORY_BEGIN:
             return {...state, loading: true};
@@ -28,7 +32,16 @@ const memory = (state: MemoryState = initialState, action: Action): MemoryState 
                 loading: false,
                 hasMore: action.hasMore
             };
+        case GET_MY_MEMORY_SUCCESS:
+            return {
+                ...state,
+                myData: action.memories,
+                myValid: true,
+                loading: false,
+                hasMore: action.hasMore
+            };
         case GET_MORE_MEMORY_BEGIN:
+        case GET_MORE_MY_MEMORY_BEGIN:
             return {...state, loadingMore: true};
         case GET_MORE_MEMORY_SUCCESS:
             return {
@@ -37,16 +50,36 @@ const memory = (state: MemoryState = initialState, action: Action): MemoryState 
                 loadingMore: false,
                 hasMore: action.hasMore
             };
+        case GET_MORE_MY__MEMORY_SUCCESS:
+            return {
+                ...state,
+                myData: [...state.myData, ...action.memories],
+                loadingMore: false,
+                hasMore: action.hasMore
+            };
         case SAVE_MEMORY_SUCCESS:
             // merge the added/updated memory instantly, without waiting for the memory list fetching
-            return {...state, valid: false, loading: false, data: [...state.data, action.memory]};
+            return {
+                ...state,
+                valid: false,
+                myValid: false,
+                loading: false,
+                data: [...state.data, action.memory],
+                myData: [...state.myData, action.memory]
+            };
         case REMOVE_MEMORY_SUCCESS:
-            return {...state, valid: false, loading: false};
+            return {...state,
+                valid: false,
+                myValid: false,
+                loading: false
+            };
         case GET_MEMORY_FAILED:
+        case GET_MY_MEMORY_FAILED:
         case REMOVE_MEMORY_FAILED:
         case SAVE_MEMORY_FAILED:
             return {...state, loading: false};
         case GET_MORE_MEMORY_FAILED:
+        case GET_MORE_MY_MEMORY_FAILED:
             return {
                 ...state,
                 loadingMore: false,

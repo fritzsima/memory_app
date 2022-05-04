@@ -6,6 +6,7 @@ import UserDocument from "../models/User/UserDocument";
 import UserCollection from "../models/User/UserCollection";
 import User from "../../client/src/models/User.d";
 import GetMemoriesResponse from "../../client/src/models/response/GetMemoriesResponse.d";
+import GetMyMemoriesResponse from "../../client/src/models/response/GetMyMemoriesResponse.d";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
 import { DEFAULT_PAGE_SIZE } from "../../client/src/shared/constants";
@@ -86,7 +87,6 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
 };
 
 export const read: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-    const me = req.user;
     const latestTime: Date = req.query.latest ? new Date(req.query.latest as string) : new Date(Date.now());
     const pageSize: number = req.query.size ? Number.parseInt(req.query.size as string) : DEFAULT_PAGE_SIZE;
 
@@ -123,6 +123,22 @@ export const read: RequestHandler = async (req: Request, res: Response, next: Ne
         data: memories.slice(0, pageSize),
         authors: authorsDic,
         hasMore: hasMore,
-        me: me
     } as GetMemoriesResponse);
+};
+
+export const me: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+    const user: User = req.user as User;
+    const latestTime: Date = req.query.latest ? new Date(req.query.latest as string) : new Date(Date.now());
+    const pageSize: number = req.query.size ? Number.parseInt(req.query.size as string) : DEFAULT_PAGE_SIZE;
+
+    const memories: MemoryDocument[] = await MemoryCollection
+        .find({ createdAt: { $lt: latestTime.toISOString()}, author: user._id })
+        .sort({ createdAt: "desc" })
+        .limit(pageSize + 1) // Use 1 more requirement for indication of hasMore
+        .exec();
+    const hasMore: boolean = memories.length === pageSize + 1;
+    return res.json({
+        data: memories.slice(0, pageSize),
+        hasMore: hasMore
+    } as GetMyMemoriesResponse);
 };

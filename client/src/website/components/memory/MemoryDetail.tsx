@@ -60,9 +60,14 @@ class MemoryDetail extends React.Component<Props, States> {
         if (!this.memoryId) {
             return <ErrorPage error={notFoundError} />;
         }
-        const memory: Memory | undefined = this.props.state.memoryState.data.find(
+        let memory: Memory | undefined = this.props.state.memoryState.myData.find(
             (value: Memory): boolean => value._id === this.memoryId
         );
+        if (!memory) {
+            memory = this.props.state.memoryState.data.find(
+                (value: Memory): boolean => value._id === this.memoryId
+            );
+        }
         if (!memory) {
             return <ErrorPage error={notFoundError} />;
         }
@@ -91,7 +96,7 @@ class MemoryDetail extends React.Component<Props, States> {
             this.props.state.userState.currentUser._id);
     }
     private addFabActions = (): void => {
-        const memory: Memory | undefined = this.props.state.memoryState.data.find(
+        const memory: Memory | undefined = this.props.state.memoryState.myData.find(
             (value: Memory): boolean => value._id === this.memoryId
         );
         if (!memory) {

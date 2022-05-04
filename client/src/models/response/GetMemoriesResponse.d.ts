@@ -5,5 +5,4 @@ export default interface GetMemoriesResponse {
     data: Memory[];
     authors: {[id: string]: User};
     hasMore: boolean;
-    me: User | undefined;
 }

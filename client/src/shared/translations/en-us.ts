@@ -12,6 +12,7 @@ const TRANSLATION: Translation = {
         // Pages.
         // pattern: page.<page_name>.<section>
         "page.home": "Home",
+        "page.mymemory": "My Memory",
         "page.waiting": "Verification email is sent",
         "page.waiting.description": "Please check your email address and click the activation link.",
         "page.about": "About ",
@@ -54,6 +55,7 @@ const TRANSLATION: Translation = {
         "page.memory.delete": "Delete Memory: {title}",
         "page.memory.delete_confirmation": "You cannot restore this memory after delete. Are you sure to delete?",
         "page.memory.empty": "No memories are added up to now.",
+        "page.memory.my_empty": "Please click + button to add a new memory.",
         "page.memory.load_more": "Load More",
         "page.memory.clear_edit": "Clear Your Editing",
         "page.memory.clear_edit_confirmation": "You cannot restore your editing after clear. Are you sure to clear?",

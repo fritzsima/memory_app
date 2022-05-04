@@ -26,7 +26,7 @@ class EditMemory extends React.Component<Props, States> {
         if (!this.memoryId) {
             return <ErrorPage error={notFoundError} />;
         }
-        const memory: Memory | undefined = this.props.state.memoryState.data.find(
+        const memory: Memory | undefined = this.props.state.memoryState.myData.find(
             (value: Memory): boolean => value._id === this.memoryId
         );
         if (!memory) {
@@ -47,7 +47,7 @@ class EditMemory extends React.Component<Props, States> {
                 </Container>
             );
         } else {
-            return <Redirect to="/memory" />;
+            return <Redirect to="/mymemory" />;
         }
     }
 

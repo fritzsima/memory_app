@@ -5,6 +5,8 @@ import MemoryCache from "./MemoryCache";
 export default interface MemoryActionCreator {
     getMemories(): any;
     getMoreMemories(earlierThan: string): any;
+    getMyMemories(): any;
+    getMoreMyMemories(earlierThan: string): any;
     addMemory(title: string, content: string, isPrivate: boolean, author: string): any;
     editMemory(memory: Memory): any;
     removeMemory(id: string): any;

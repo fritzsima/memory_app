@@ -1,6 +1,6 @@
 import { AnyAction as Action } from "redux";
 import { USER_REQUEST_START, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT } from "../actions/user";
-import { AUTHENTICATE_SUCCESS } from "../actions/memory";
+import { AUTHENTICATE_SUCCESS } from "../actions/user";
 import UserState from "../models/client/UserState";
 
 const initialState: UserState = {

@@ -5,7 +5,7 @@ import UserDocument from "../models/User/UserDocument";
 import UserCollection from "../models/User/UserCollection";
 import User from "../../client/src/models/User";
 
-passport.serializeUser<any>((user: any, done: (err: any, id?: any) => void) => {
+passport.serializeUser<any, any>((user: any, done: (err: any, id?: any) => void) => {
     done(undefined, user._id);
 });
 

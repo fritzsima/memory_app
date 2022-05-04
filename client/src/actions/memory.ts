@@ -4,11 +4,11 @@ import fetch from "../shared/fetch";
 import actions from "./common";
 import Memory from "../models/Memory";
 import GetMemoriesResponse from "../models/response/GetMemoriesResponse.d";
+import GetMyMemoriesResponse from "../models/response/GetMyMemoriesResponse.d";
 import { getToast as toast } from "../shared/toast";
 import MemoryCache from "../models/client/MemoryCache";
 import { getStorage as localStorage } from "../shared/storage";
 
-export const AUTHENTICATE_SUCCESS: string = "AUTHENTICATE_SUCCESS";
 export const SAVE_MEMORY_BEGIN: string = "SAVE_MEMORY_BEGIN";
 export const SAVE_MEMORY_SUCCESS: string = "SAVE_MEMORY_SUCCESS";
 export const SAVE_MEMORY_FAILED: string = "SAVE_MEMORY_FAILED";
@@ -29,6 +29,12 @@ export const REMOVE_EDIT_MEMORY_CACHE: string = "REMOVE_EDIT_MEMORY_CACHE";
 export const IGNORE_CACHE_RESTORE: string = "IGNORE_CACHE_RESTORE";
 export const NEW_MEMORY_CACHE_ID: string = "NEW_MEMORY_CACHE_ID";
 export const MEMORY_EDIT_CACHE_KEY_PREFIX: string = "memoryEdit/";
+export const GET_MY_MEMORY_BEGIN: string = "GET_MY_MEMORY_BEGIN";
+export const GET_MY_MEMORY_SUCCESS: string = "GET_MY_MEMORY_SUCCESS";
+export const GET_MY_MEMORY_FAILED: string = "GET_MY_MEMORY_FAILED";
+export const GET_MORE_MY_MEMORY_BEGIN: string = "GET_MORE_MY_MEMORY_BEGIN";
+export const GET_MORE_MY__MEMORY_SUCCESS: string = "GET_MORE_MY__MEMORY_SUCCESS";
+export const GET_MORE_MY_MEMORY_FAILED: string = "GET_MORE_MY_MEMORY_FAILED";
 
 const removeEditCacheExec = (id: string, dispatch: Dispatch<any>): void => {
     localStorage().removeItem(MEMORY_EDIT_CACHE_KEY_PREFIX + id);
@@ -42,14 +48,8 @@ const memoryActionCreator: MemoryActionCreator = {
     getMemories(): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: GET_MEMORY_BEGIN});
-            fetch("/api/memory", undefined, "GET")
+            fetch(`/api/memory`, undefined, "GET")
             .then((json: GetMemoriesResponse) => {
-                if (json && json.me) {
-                    dispatch({
-                        type: AUTHENTICATE_SUCCESS,
-                        user: json.me
-                    });
-                }
                 if (json && json.data && json.authors) {
                     dispatch({
                         type: GET_MEMORY_SUCCESS,
@@ -84,6 +84,46 @@ const memoryActionCreator: MemoryActionCreator = {
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(GET_MORE_MEMORY_FAILED, error));
+            });
+        };
+    },
+    getMyMemories(): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({type: GET_MY_MEMORY_BEGIN});
+            fetch(`/api/memory/me`, undefined, "GET")
+            .then((json: GetMyMemoriesResponse) => {
+                if (json && json.data) {
+                    dispatch({
+                        type: GET_MY_MEMORY_SUCCESS,
+                        memories: json.data,
+                        hasMore: json.hasMore
+                    });
+                } else {
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
+                }
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(GET_MY_MEMORY_FAILED, error));
+            });
+        };
+    },
+    getMoreMyMemories(earlierThan: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({type: GET_MORE_MY_MEMORY_BEGIN});
+            fetch(`/api/memory/me?latest=${earlierThan}`, undefined, "GET")
+            .then((json: GetMyMemoriesResponse) => {
+                if (json && json.data) {
+                    dispatch({
+                        type: GET_MORE_MY__MEMORY_SUCCESS,
+                        memories: json.data,
+                        hasMore: json.hasMore
+                    });
+                } else {
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
+                }
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(GET_MORE_MY_MEMORY_FAILED, error));
             });
         };
     },

@@ -34,6 +34,10 @@ memory.route("/edit").post(
     controllers.update
 );
 memory.route("/").get(controllers.read);
+memory.route("/me").get(
+    checkUser,
+    controllers.me
+);
 memory.route("/remove/:id").get(
     checkUser,
     controllers.remove

@@ -6,6 +6,8 @@ export default interface MemoryState {
     loading: boolean;
     valid: boolean;
     data: Memory[]; // All loaded articles
+    myValid: boolean;
+    myData: Memory[];
     loadingMore: boolean;
     hasMore: boolean;
     editCache: {[id: string]: MemoryCache};
