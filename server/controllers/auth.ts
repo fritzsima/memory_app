@@ -12,7 +12,7 @@ export const callback: RequestHandler = (req: Request, res: Response, next: Next
 
 export const authenticate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
-        return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
+        return Promise.reject(res.status(401).json());
     }
     const user: User = req.user as User;
     return res.json(user);
