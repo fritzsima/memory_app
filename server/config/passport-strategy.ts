@@ -26,8 +26,7 @@ export const magicLogin = new MagicLoginStrategy({
         const to = destination;
         const subject = "";
         const content = `Click this link to finish logging in: https://yourcompany.com${href}`;
-        console.log("content", content);
-        // await sendEmail(to, subject, content);
+        await sendEmail(to, subject, content);
     },
 
     // Once the user clicks on the magic link and verifies their login attempt,
