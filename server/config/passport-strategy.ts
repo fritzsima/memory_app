@@ -25,7 +25,7 @@ export const magicLogin = new MagicLoginStrategy({
     sendMagicLink: async (destination, href) => {
         const to = destination;
         const subject = "";
-        const content = `Click this link to finish logging in: https://yourcompany.com${href}`;
+        const content = `Click this link to finish logging in: http://3.22.1.249:3000${href}`;
         await sendEmail(to, subject, content);
     },
 
